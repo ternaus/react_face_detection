@@ -23,5 +23,44 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "ignorePatterns": ["**/node_modules/**"]
+  "ignorePatterns": [
+    "**/node_modules/**"
+  ],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
+        ]
+      }
+    }
+  },
+  "rules": {
+    "comma-dangle": "off",
+    "Missing file extension": "off",
+    "no-use-before-define": "off",
+    "react/react-in-jsx-scope": "off",
+    "quotes": "off",
+    "react/jsx-filename-extension": [
+      2,
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  }
 }
