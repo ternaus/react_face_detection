@@ -44,6 +44,8 @@
     "no-use-before-define": "off",
     "react/react-in-jsx-scope": "off",
     "quotes": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
     "react/jsx-filename-extension": [
       2,
       {

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 const App = () => {
   const [imageFile, setImageFile] = useState<File>();
+  const [image, setImage] = useState<HTMLImageElement>();
   const [isPredicting, setIsPredicting] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
 
@@ -14,9 +15,30 @@ const App = () => {
     setImageSelected(true);
   };
 
+  const fileRead = (imgFile: File) => {
+    const reader: FileReader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      if (typeof reader.result === "string") {
+        img.src = reader.result;
+      }
+      (() => {
+        if (img.complete) {
+          setImage(img);
+        }
+      })();
+    };
+    if (imgFile) {
+      reader.readAsDataURL(imgFile!);
+    }
+  };
+
   const detectFaces = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsPredicting(isPredicting);
     console.log(imageFile);
+    fileRead(imageFile!);
+
+    console.log(image);
   };
 
   return (
