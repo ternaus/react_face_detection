@@ -1,5 +1,6 @@
 import { Button, Card, Form } from "react-bootstrap";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -10,6 +11,17 @@ const App = () => {
   const [image, setImage] = useState<HTMLImageElement>();
   const [isPredicting, setIsPredicting] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
+  const [model, setModel] = useState();
+
+  const loadModel = async () => {
+    setModel(await blazeface.load());
+  };
+
+  useEffect(() => {
+    tf.ready().then(() => {
+      loadModel();
+    });
+  }, []);
 
   const imageFieldChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -17,6 +29,8 @@ const App = () => {
     setImageFile((event.target as HTMLInputElement).files![0]);
     setImageSelected(true);
   };
+
+  console.log("RELOADING!");
 
   const detectFaces = (event: React.MouseEvent<HTMLButtonElement>) => {
     // convert binary data to image object
@@ -42,12 +56,13 @@ const App = () => {
     console.log("Predicting = ", isPredicting);
     console.log(imageFile);
     fileRead(imageFile!);
-    console.log(image?.width, image?.height);
+    console.log("Checking height, width = ", image?.width, image?.height);
 
     const predict = async () => {
-      const model = await blazeface.load();
       const returnTensors = false;
+      // @ts-ignore
       const predictions = await model.estimateFaces(image, returnTensors);
+
       console.log(predictions);
     };
 

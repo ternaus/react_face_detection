@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@tensorflow-models/blazeface": "^0.0.7",
+    "@tensorflow/tfjs": "^3.9.0",
     "@tensorflow/tfjs-backend-webgl": "^3.9.0",
     "bootstrap": "^5.1.0",
     "n": "^7.4.1",
