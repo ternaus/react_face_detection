@@ -63,9 +63,6 @@ const App = () => {
               />
             </Form.Group>
           </Form>
-          {/*{imageSelected && (*/}
-          {/*  <BImage src={URL.createObjectURL(imageFile!)} fluid />*/}
-          {/*)}*/}
         </Card.Body>
       </Card>
       {predictions && <Canvas predictions={predictions} image={image!} />}

@@ -10,12 +10,31 @@ const Canvas: React.FC<{
   const [observed, setObserved] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const canvasWidth = predictions[0].imageWidth;
-  const canvasHeight = predictions[0].imageHeight;
-
   useEffect(() => {
     const ctx = canvasRef.current!.getContext("2d");
-    ctx!.drawImage(image, 0, 0);
+    if (!ctx) return;
+
+    ctx.font = "18px serif";
+    ctx.fillStyle = "#ff0000";
+    ctx.strokeStyle = "#ff0000";
+    ctx.drawImage(image, 0, 0);
+    ctx.beginPath();
+
+    predictions.forEach((element) => {
+      ctx.fillText(
+        element.classScore.toFixed(2),
+        element.box.x,
+        element.box.y - 10
+      );
+
+      ctx.rect(
+        element.box.x,
+        element.box.y,
+        element.box.width,
+        element.box.height
+      );
+    });
+    ctx.stroke();
   }, [observed]);
 
   return (
@@ -25,8 +44,8 @@ const Canvas: React.FC<{
         // @ts-ignore
         canvasRef.current = element;
       }}
-      width={canvasWidth}
-      height={canvasHeight}
+      width={image.width}
+      height={image.height}
     />
   );
 };
