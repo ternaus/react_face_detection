@@ -1,6 +1,9 @@
-import "./App.css";
 import { Button, Card, Form } from "react-bootstrap";
 import React, { useState } from "react";
+import "@tensorflow/tfjs-backend-webgl";
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const blazeface = require("@tensorflow-models/blazeface");
 
 const App = () => {
   const [imageFile, setImageFile] = useState<File>();
@@ -15,30 +18,42 @@ const App = () => {
     setImageSelected(true);
   };
 
-  const fileRead = (imgFile: File) => {
-    const reader: FileReader = new FileReader();
-    reader.onload = () => {
-      const img = new Image();
-      if (typeof reader.result === "string") {
-        img.src = reader.result;
-      }
+  const detectFaces = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // convert binary data to image object
+    const fileReadComplete = (e: any) => {
+      const im = new Image();
+      im.src = e.target.result;
       (() => {
-        if (img.complete) {
-          setImage(img);
+        if (im.complete) {
+          setImage(im);
         }
       })();
     };
-    if (imgFile) {
-      reader.readAsDataURL(imgFile!);
-    }
-  };
 
-  const detectFaces = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setIsPredicting(isPredicting);
+    const fileRead = (imgFile: File) => {
+      const reader = new FileReader();
+      reader.onload = fileReadComplete;
+      if (imgFile) {
+        reader.readAsDataURL(imgFile);
+      }
+    };
+
+    setIsPredicting(true);
+    console.log("Predicting = ", isPredicting);
     console.log(imageFile);
     fileRead(imageFile!);
+    console.log(image?.width, image?.height);
 
-    console.log(image);
+    const predict = async () => {
+      const model = await blazeface.load();
+      const returnTensors = false;
+      const predictions = await model.estimateFaces(image, returnTensors);
+      console.log(predictions);
+    };
+
+    if (image) {
+      predict();
+    }
   };
 
   return (
