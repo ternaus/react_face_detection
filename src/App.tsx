@@ -1,18 +1,18 @@
 import { Card, Container, Form, Image as BImage } from "react-bootstrap";
 
 import React, { useEffect, useState } from "react";
+import * as faceapi from "@vladmandic/face-api";
 import { FaceDetection } from "@vladmandic/face-api";
 
 import * as tf from "@tensorflow/tfjs";
-
-import * as faceapi from "@vladmandic/face-api";
+import Canvas from "./components/Canvas";
 
 const MODEL_URL = "/models";
 
 const App = () => {
   const [imageFile, setImageFile] = useState<File>();
-  const [imageSelected, setImageSelected] = useState(false);
   const [predictions, setPredictions] = useState<FaceDetection[]>();
+  const [image, setImage] = useState<HTMLImageElement>();
 
   const loadModel = async () => {
     await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
@@ -20,9 +20,7 @@ const App = () => {
 
   useEffect(() => {
     tf.ready().then(() => {
-      console.log("starting loading model");
       loadModel();
-      console.log("Model loaded!");
     });
   }, []);
 
@@ -30,7 +28,6 @@ const App = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setImageFile((event.target as HTMLInputElement).files![0]);
-    setImageSelected(true);
   };
 
   const detectFaces = () => {
@@ -41,6 +38,7 @@ const App = () => {
       const im = new Image();
       im.src = e.target.result;
       im.onload = async () => {
+        setImage(im);
         setPredictions(await faceapi.detectAllFaces(im));
       };
     };
@@ -65,11 +63,12 @@ const App = () => {
               />
             </Form.Group>
           </Form>
-          {imageSelected && (
-            <BImage src={URL.createObjectURL(imageFile!)} fluid />
-          )}
+          {/*{imageSelected && (*/}
+          {/*  <BImage src={URL.createObjectURL(imageFile!)} fluid />*/}
+          {/*)}*/}
         </Card.Body>
       </Card>
+      {predictions && <Canvas predictions={predictions} image={image!} />}
     </Container>
   );
 };
