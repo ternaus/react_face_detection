@@ -61,7 +61,7 @@ const Canvas: React.FC<{
           // @ts-ignore
           canvasRef.current = element;
         }}
-        style={{ width: "1280px", height: "auto" }}
+        style={{ width: "1024px", height: "auto" }}
         width={image.width}
         height={image.height}
       />
