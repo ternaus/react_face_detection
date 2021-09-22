@@ -39,6 +39,8 @@
     }
   },
   "rules": {
+    "max-len": ["warn", { "code": 120 }],
+    "@typescript-eslint/no-var-requires": "off",
     "comma-dangle": "off",
     "Missing file extension": "off",
     "no-use-before-define": "off",

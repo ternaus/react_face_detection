@@ -1,25 +1,28 @@
 import { Card, Container, Form, Image as BImage } from "react-bootstrap";
+
 import React, { useEffect, useState } from "react";
+import { FaceDetection } from "@vladmandic/face-api";
 
 import * as tf from "@tensorflow/tfjs";
-import "@tensorflow/tfjs-backend-webgl";
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const blazeface = require("@tensorflow-models/blazeface");
+import * as faceapi from "@vladmandic/face-api";
+
+const MODEL_URL = "/models";
 
 const App = () => {
   const [imageFile, setImageFile] = useState<File>();
   const [imageSelected, setImageSelected] = useState(false);
-  const [model, setModel] = useState();
-  const [predictions, setPredictions] = useState();
+  const [predictions, setPredictions] = useState<FaceDetection[]>();
 
   const loadModel = async () => {
-    setModel(await blazeface.load());
+    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
   };
 
   useEffect(() => {
     tf.ready().then(() => {
+      console.log("starting loading model");
       loadModel();
+      console.log("Model loaded!");
     });
   }, []);
 
@@ -38,9 +41,7 @@ const App = () => {
       const im = new Image();
       im.src = e.target.result;
       im.onload = async () => {
-        const returnTensors = false;
-        // @ts-ignore
-        setPredictions(await model.estimateFaces(im, returnTensors));
+        setPredictions(await faceapi.detectAllFaces(im));
       };
     };
     reader.readAsDataURL(imageFile);
