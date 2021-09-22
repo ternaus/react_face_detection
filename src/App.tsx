@@ -1,4 +1,4 @@
-import { Card, Container, Form, Image as BImage } from "react-bootstrap";
+import { Card, Container, Form } from "react-bootstrap";
 
 import React, { useEffect, useState } from "react";
 import * as faceapi from "@vladmandic/face-api";
@@ -39,15 +39,18 @@ const App = () => {
       im.src = e.target.result;
       im.onload = async () => {
         setImage(im);
-        setPredictions(await faceapi.detectAllFaces(im));
+        setPredictions(
+          await faceapi.detectAllFaces(
+            im,
+            new faceapi.SsdMobilenetv1Options({ minConfidence: 0.6 })
+          )
+        );
       };
     };
     reader.readAsDataURL(imageFile);
   };
 
   useEffect(() => detectFaces(), [imageFile]);
-
-  console.log(predictions);
 
   return (
     <Container>
