@@ -1,4 +1,7 @@
 # Face Detector with React and Tensorflow.js
+
+Demo at [https://react-face-detector.netlify.app/](https://react-face-detector.netlify.app/)
+
 ![](https://habrastorage.org/webt/rs/bv/jt/rsbvjtkakpnlda69bhdbo35lfty.png)
 
 It was challenging to find online an example of:
