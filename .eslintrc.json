@@ -46,6 +46,7 @@
     "quotes": "off",
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "object-curly-newline": "off",
     "react/jsx-filename-extension": [
       2,
       {

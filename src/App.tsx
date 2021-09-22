@@ -1,5 +1,12 @@
-import { Button, Card, Form } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Container,
+  Form,
+  Image as BImage,
+} from "react-bootstrap";
 import React, { useEffect, useState } from "react";
+
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-backend-webgl";
 
@@ -72,7 +79,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <Container>
       <Card>
         <Card.Body>
           <Form>
@@ -92,9 +99,12 @@ const App = () => {
               Upload
             </Button>
           </Form>
+          {imageSelected && (
+            <BImage src={URL.createObjectURL(imageFile!)} fluid />
+          )}
         </Card.Body>
       </Card>
-    </>
+    </Container>
   );
 };
 
