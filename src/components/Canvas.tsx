@@ -7,14 +7,6 @@ const Canvas: React.FC<{
 }> = (props) => {
   const { predictions, image } = props;
 
-  const maxImageSize = Math.max(image.width, image.height);
-  const maxCanvasSize = 800;
-
-  const canvasHeight = Math.round(
-    maxCanvasSize * (image.height / maxImageSize)
-  );
-  const canvasWidth = Math.round(maxCanvasSize * (image.width / maxImageSize));
-
   const [observed, setObserved] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -25,11 +17,6 @@ const Canvas: React.FC<{
     ctx!.fillStyle = "#ff0000";
     ctx!.strokeStyle = "#ff0000";
 
-    const hRatio = canvasRef.current!.height / image.width;
-    const vRatio = canvasRef.current!.width / image.height;
-
-    const ratio = Math.min(hRatio, vRatio);
-
     ctx!.drawImage(
       image,
       0,
@@ -38,8 +25,8 @@ const Canvas: React.FC<{
       image.height,
       0,
       0,
-      image.width * ratio,
-      image.height * ratio
+      image.width,
+      image.height
     );
 
     ctx!.beginPath();
@@ -47,15 +34,15 @@ const Canvas: React.FC<{
     predictions.forEach((element) => {
       ctx!.fillText(
         element.classScore.toFixed(2),
-        element.box.x * ratio,
-        element.box.y * ratio - 10
+        element.box.x,
+        element.box.y - 10
       );
 
       ctx!.rect(
-        element.box.x * ratio,
-        element.box.y * ratio,
-        element.box.width * ratio,
-        element.box.height * ratio
+        element.box.x,
+        element.box.y,
+        element.box.width,
+        element.box.height
       );
     });
     ctx!.stroke();
@@ -66,19 +53,18 @@ const Canvas: React.FC<{
       <div className="d-flex justify-content-center">
         {predictions.length === 0 && <h1>No faces detected</h1>}
       </div>
-      <div className="d-flex justify-content-center">
-        <canvas
-          ref={(element) => {
-            if (!observed) {
-              setObserved(true);
-            }
-            // @ts-ignore
-            canvasRef.current = element;
-          }}
-          width={canvasWidth}
-          height={canvasHeight}
-        />
-      </div>
+      <canvas
+        ref={(element) => {
+          if (!observed) {
+            setObserved(true);
+          }
+          // @ts-ignore
+          canvasRef.current = element;
+        }}
+        style={{ width: "1280px", height: "auto" }}
+        width={image.width}
+        height={image.height}
+      />
     </>
   );
 };

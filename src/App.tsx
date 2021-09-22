@@ -1,8 +1,13 @@
 import { Card, Container, Form } from "react-bootstrap";
 
 import React, { useEffect, useState } from "react";
-import * as faceapi from "@vladmandic/face-api";
-import { FaceDetection } from "@vladmandic/face-api";
+
+import {
+  FaceDetection,
+  nets,
+  detectAllFaces,
+  SsdMobilenetv1Options,
+} from "@vladmandic/face-api";
 
 import * as tf from "@tensorflow/tfjs";
 import Canvas from "./components/Canvas";
@@ -15,7 +20,7 @@ const App = () => {
   const [image, setImage] = useState<HTMLImageElement>();
 
   const loadModel = async () => {
-    await faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
+    await nets.ssdMobilenetv1.loadFromUri(MODEL_URL);
   };
 
   useEffect(() => {
@@ -40,9 +45,9 @@ const App = () => {
       im.onload = async () => {
         setImage(im);
         setPredictions(
-          await faceapi.detectAllFaces(
+          await detectAllFaces(
             im,
-            new faceapi.SsdMobilenetv1Options({ minConfidence: 0.6 })
+            new SsdMobilenetv1Options({ minConfidence: 0.6 })
           )
         );
       };
