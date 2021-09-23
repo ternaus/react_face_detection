@@ -53,18 +53,25 @@ const Canvas: React.FC<{
       <div className="d-flex justify-content-center">
         {predictions.length === 0 && <h1>No faces detected</h1>}
       </div>
-      <canvas
-        ref={(element) => {
-          if (!observed) {
-            setObserved(true);
-          }
-          // @ts-ignore
-          canvasRef.current = element;
-        }}
-        style={{ width: "1024px", height: "auto" }}
-        width={image.width}
-        height={image.height}
-      />
+      <div className="justify-content-center">
+        <canvas
+          ref={(element) => {
+            if (!observed) {
+              setObserved(true);
+            }
+            /* @ts-ignore*/
+            canvasRef.current = element;
+          }}
+          style={{
+            width: "80vw",
+            height: "auto",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+          width={image.width}
+          height={image.height}
+        />
+      </div>
     </>
   );
 };

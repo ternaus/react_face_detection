@@ -3,9 +3,9 @@ import { Card, Container, Form } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
 import {
+  detectAllFaces,
   FaceDetection,
   nets,
-  detectAllFaces,
   SsdMobilenetv1Options,
 } from "@vladmandic/face-api";
 
