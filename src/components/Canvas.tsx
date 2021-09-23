@@ -1,11 +1,30 @@
 import React, { useRef, useState } from "react";
 import { FaceDetection } from "@vladmandic/face-api";
 
+const MAX_SIZE_IMAGE = 1024; // In pixels
+
 const Canvas: React.FC<{
   predictions: FaceDetection[];
   image: HTMLImageElement;
 }> = (props) => {
   const { predictions, image } = props;
+
+  const { height, width } = image;
+
+  let ratio: number;
+
+  let canvasScreenWidth: string;
+  let canvasScreenHeight: string;
+
+  if (width / window.innerWidth > height / window.innerHeight) {
+    ratio = MAX_SIZE_IMAGE / width;
+    canvasScreenWidth = "80vw";
+    canvasScreenHeight = "auto";
+  } else {
+    ratio = MAX_SIZE_IMAGE / height;
+    canvasScreenWidth = "auto";
+    canvasScreenHeight = "80vh";
+  }
 
   const [observed, setObserved] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -17,32 +36,22 @@ const Canvas: React.FC<{
     ctx!.fillStyle = "#ff0000";
     ctx!.strokeStyle = "#ff0000";
 
-    ctx!.drawImage(
-      image,
-      0,
-      0,
-      image.width,
-      image.height,
-      0,
-      0,
-      image.width,
-      image.height
-    );
+    ctx!.drawImage(image, 0, 0, image.width * ratio, image.height * ratio);
 
     ctx!.beginPath();
 
     predictions.forEach((element) => {
       ctx!.fillText(
         element.classScore.toFixed(2),
-        element.box.x,
-        element.box.y - 10
+        element.box.x * ratio,
+        element.box.y * ratio - 10
       );
 
       ctx!.rect(
-        element.box.x,
-        element.box.y,
-        element.box.width,
-        element.box.height
+        element.box.x * ratio,
+        element.box.y * ratio,
+        element.box.width * ratio,
+        element.box.height * ratio
       );
     });
     ctx!.stroke();
@@ -63,13 +72,13 @@ const Canvas: React.FC<{
             canvasRef.current = element;
           }}
           style={{
-            width: "80vw",
-            height: "auto",
+            width: `${canvasScreenWidth}`,
+            height: `${canvasScreenHeight}`,
             marginRight: "auto",
             marginLeft: "auto",
           }}
-          width={image.width}
-          height={image.height}
+          width={width * ratio}
+          height={height * ratio}
         />
       </div>
     </>
