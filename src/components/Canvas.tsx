@@ -62,7 +62,7 @@ const Canvas: React.FC<{
       <div className="d-flex justify-content-center">
         {predictions.length === 0 && <h1>No faces detected</h1>}
       </div>
-      <div className="justify-content-center">
+      <div className="d-flex justify-content-center">
         <canvas
           ref={(element) => {
             if (!observed) {
